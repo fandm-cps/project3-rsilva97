@@ -20,7 +20,7 @@ TEST_CASE("Testing ReadGraph"){
 
         int numVertices = readGraph(file, matrix, vLabels, eLabels);
 
-        REQUIRE(numVertices == 4);
+        REQUIRE(numVertices == 6);
 
         /*
         for(int i = 0; i < numVertices; i++){
