@@ -52,5 +52,36 @@ void dijkstra(const double* const * matrix, int numVertices, int source, double*
 }
 
 int getPath(int source, int dest, const int* prev, int*& path){
-    
+    int size = 1, next = prev[dest];
+
+    if(source == next){
+        size = 2;
+    }
+    else{
+        while(next != source){
+            if(prev[next] == source){
+                size++;
+            }
+            next = prev[next];
+            size++;
+        }
+    }
+
+    path = new int[size];
+    path[0] = source;
+    path[size-1] = dest;
+
+    if(size > 2){
+        int count = 2;
+        next = prev[dest];
+
+        while(next != source){
+            path[size-count] = next;
+            count++;
+            next = prev[next];
+        }
+        
+    }
+
+    return size;
 }
