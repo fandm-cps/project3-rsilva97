@@ -39,8 +39,8 @@ int main(int argc, char* argv[]) {
     int numPath = getPath(sVertexNum, dVertexNum, prev, path);
 
     outFile << numVertices << " " << numPath << endl;
-    for(string vertex : vLabels){
-        outFile << vertex << endl;
+    for(int i = 0; i < numVertices; i++){
+        outFile << vLabels[i] << endl;
     }
     for(int i = 0; i < numPath; i++){
         outFile << eLabels[path[i]] << endl;

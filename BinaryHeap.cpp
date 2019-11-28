@@ -1,7 +1,11 @@
 #include "BinaryHeap.hpp"
 
 BinaryHeap::BinaryHeap(const double* priorities, int numItems) {
+    
 
+    for(int i = 0; i < numItems; i++){
+
+    }
 }
 
 BinaryHeap::~BinaryHeap() {
@@ -9,7 +13,7 @@ BinaryHeap::~BinaryHeap() {
 }
 
 int BinaryHeap::getMin() const {
-
+    
 }
 
 void BinaryHeap::popMin() {

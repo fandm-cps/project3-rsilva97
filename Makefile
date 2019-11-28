@@ -19,8 +19,11 @@ shortestPath_cov: shortestPath_TEST.cpp shortestPath.hpp
 shortestPath.o: shortestPath.cpp shortestPath.hpp
 	$(CC) -c shortestPath.cpp
 
-matrixDijkstra: matrixDijkstra.cpp shortestPath.o
-	$(CC) -o matrixDijkstra matrixDijkstra.cpp shortestPath.o
+readGraph.o: readGraph.cpp readGraph.hpp
+	$(CC) -c readGraph.cpp
+
+matrixDijkstra: matrixDijkstra.cpp shortestPath.o readGraph.o
+	$(CC) -o matrixDijkstra matrixDijkstra.cpp shortestPath.o readGraph.o
 
 clean:
 	rm readGraph shortestPath *.o *.hpp.gch *.gcda *.gcno *~ *.png *.css *.html 7/;
