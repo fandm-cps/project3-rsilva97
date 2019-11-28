@@ -36,6 +36,15 @@ TEST_CASE("Testing shortestPath"){
         REQUIRE(prev[4] == 1);
         REQUIRE(prev[5] == 3);
 
+        /*int* path;
+
+		int pathSize = getPath(0, 3, prev, path);
+
+		REQUIRE(pathSize == 3);
+		REQUIRE(path[0] == 0);
+		REQUIRE(path[1] == 2);
+		REQUIRE(path[2] == 3);*/
+
     }
 
 }

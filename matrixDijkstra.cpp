@@ -1,65 +1,51 @@
 #include <iostream>
 #include <fstream>
-#include <boost/algorithm/string.hpp>
-#include "numberTheory.hpp"
-#include "ReallyLongInt.hpp"
+#include <string>
+#include "readGraph.hpp"
+#include "shortestPath.hpp"
 
 using namespace std;
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
 
-    bool endProgram = false;
+	ifstream file;
+	ofstream outFile;
 
-    ReallyLongInt e, n;
+	file.open(argv[1], ios_base::in);
+	outFile.open(argv[2], ios_base::out);
+	string sVertex = argv[3];
+	string dVertex = argv[4];
 
-    ifstream keyFile;
-    keyFile.open(argv[1], ios_base::in);
+    double** matrix;
+    string* vLabels;
+    string** eLabels;
+    double* dist;
+    int* prev;
+    int* path;
 
-    if(keyFile.is_open()){
-        string fileContents;
-        vector<string> results;
+    int numVertices = readGraph(file, matrix, vLabels, eLabels);
 
-        getline(keyFile, fileContents);
-
-        boost::split(results, fileContents, [](char c){return c == ' ';});
-        
-        ReallyLongInt tmpE(stoll(results[0], nullptr, 10));
-        ReallyLongInt tmpN(stoll(results[1], nullptr, 10));
-
-        e = tmpE;
-        n = tmpN;
-
-        keyFile.close();
-    }
-    else{
-        cout << "open() failed: check if file is in right folder" << endl;
-        endProgram = true;
-    }
-
-    if(!endProgram){
-        ifstream inFile;
-        ofstream outFile;
-        inFile.open(argv[2], ios_base::in);
-        outFile.open(argv[3], ios_base::out);
-
-        if(inFile.is_open() && outFile.is_open()){
-            char ch;
-            long long ascii;
-            
-            while(inFile >> noskipws >> ch){
-                ascii = int(ch);
-                ReallyLongInt x(ascii);
-                ReallyLongInt y(x.exp(e) % n);
-                outFile << y.toString() << endl;
-            }
-
-            inFile.close();
-            outFile.close();
+    int sVertexNum = -1, dVertexNum = -1;
+    for(int i = 0; i < numVertices; i++){
+        if(vLabels[i] == sVertex){
+            sVertexNum = i;
         }
-        else{
-            cout << "open() failed: check if file is in right folder" << endl;
+        if(vLabels[i] == dVertex){
+            sVertexNum = i;
         }
     }
 
-    return 0;
+    dijkstra(matrix, numVertices, sVertexNum, dist, prev);
+    int numPath = getPath(sVertexNum, dVertexNum, prev, path);
+
+    outFile << numVertices << " " << numPath << endl;
+    for(string vertex : vLabels){
+        outFile << vertex << endl;
+    }
+    for(int i = 0; i < numPath; i++){
+        outFile << eLabels[path[i]] << endl;
+    }
+	
+	outFile.close();
+
 }
