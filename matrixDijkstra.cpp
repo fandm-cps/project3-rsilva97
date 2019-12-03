@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <chrono>
 #include "readGraph.hpp"
 #include "shortestPath.hpp"
 
@@ -13,8 +14,8 @@ int main(int argc, char* argv[]) {
 
 	file.open(argv[1], ios_base::in);
 	outFile.open(argv[2], ios_base::out);
-	string sVertex = argv[3];
-	string dVertex = argv[4];
+	string srcVertex = argv[3];
+	string destVertex = argv[4];
 
     double** matrix;
     string* vLabels;
@@ -23,29 +24,40 @@ int main(int argc, char* argv[]) {
     int* prev;
     int* path;
 
+    auto startTime = std::chrono::system_clock::now();
+
     int numVertices = readGraph(file, matrix, vLabels, eLabels);
 
-    int sVertexNum = -1, dVertexNum = -1;
+    int srcVertexIdx = -1, destVertexIdx = -1;
     for(int i = 0; i < numVertices; i++){
-        if(vLabels[i] == sVertex){
-            sVertexNum = i;
+        if(vLabels[i] == srcVertex){
+            srcVertexIdx = i;
         }
-        if(vLabels[i] == dVertex){
-            sVertexNum = i;
+        if(vLabels[i] == destVertex){
+            destVertexIdx = i;
         }
     }
 
-    dijkstra(matrix, numVertices, sVertexNum, dist, prev);
-    int numPath = getPath(sVertexNum, dVertexNum, prev, path);
+    dijkstra(matrix, numVertices, srcVertexIdx, dist, prev);
 
-    outFile << numVertices << " " << numPath << endl;
+    int pathLength = getPath(srcVertexIdx, destVertexIdx, prev, path);
+
+    outFile << numVertices << " " << pathLength-1 << endl;
     for(int i = 0; i < numVertices; i++){
         outFile << vLabels[i] << endl;
     }
-    for(int i = 0; i < numPath; i++){
-        outFile << eLabels[path[i]] << endl;
+    for(int i = 0; i < pathLength-1; i++){
+        outFile << path[i] << " " << path[i+1] << " " << matrix[path[i]][path[i+1]] << " " << eLabels[path[i]][path[i+1]] << endl;
     }
 	
+    file.close();
 	outFile.close();
+
+    auto endTime = std::chrono::system_clock::now();
+    auto durMicrosecs = chrono::duration_cast<chrono::microseconds>(endTime-startTime);
+    double elapsedTime = durMicrosecs.count();
+
+    cout << "Weight of shortest path: " << dist[destVertexIdx] << endl;
+    cout << "Duration of Dijkstra's algorithm: " << elapsedTime << " microseconds." << endl;
 
 }

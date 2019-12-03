@@ -13,7 +13,7 @@ void dijkstra(const double* const * matrix, int numVertices, int source, double*
 
     for(int i = 0; i < numVertices; i++){
         dist[i] = numeric_limits<double>::infinity();
-        prev[i] = 0;
+        prev[i] = -1;
         foundMin[i] = false;
     }
     dist[source] = 0;

@@ -21,27 +21,17 @@ TEST_CASE("Testing ReadGraph"){
         int numVertices = readGraph(file, matrix, vLabels, eLabels);
 
         REQUIRE(numVertices == 4);
-
-        /*
-        for(int i = 0; i < numVertices; i++){
-            cout << "Vertex: " << vLabels[i] << endl;
-            cout << "Edges: " << endl;
-            for(int j = 0; j < numVertices; j++){
-                cout << eLabels[i][j] << endl;
-            } 
-            cout << endl;
-        }
        
+        cout << "Adjacency Matrix: " << endl;
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < numVertices; j++){
                 cout << matrix[i][j] << " ";
             }
             cout<<endl;
         }   
-        */
        
     }
-
+    
     SECTION("second function") {
 		ifstream file1;
 		file1.open("graph.txt");
@@ -63,7 +53,6 @@ TEST_CASE("Testing ReadGraph"){
 		file1.close();
 
 	}
-
 
 }
 

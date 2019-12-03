@@ -2,10 +2,6 @@
 
 BinaryHeap::BinaryHeap(const double* priorities, int numItems) {
     
-
-    for(int i = 0; i < numItems; i++){
-
-    }
 }
 
 BinaryHeap::~BinaryHeap() {
