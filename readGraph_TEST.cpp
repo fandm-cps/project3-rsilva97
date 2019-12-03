@@ -21,27 +21,17 @@ TEST_CASE("Testing ReadGraph"){
         int numVertices = readGraph(file, matrix, vLabels, eLabels);
 
         REQUIRE(numVertices == 4);
-
-        /*
-        for(int i = 0; i < numVertices; i++){
-            cout << "Vertex: " << vLabels[i] << endl;
-            cout << "Edges: " << endl;
-            for(int j = 0; j < numVertices; j++){
-                cout << eLabels[i][j] << endl;
-            } 
-            cout << endl;
-        }
        
+        cout << "Adjacency Matrix: " << endl;
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < numVertices; j++){
                 cout << matrix[i][j] << " ";
             }
             cout<<endl;
         }   
-        */
        
     }
-
+    
     SECTION("second function") {
 		ifstream file1;
 		file1.open("graph.txt");
@@ -64,7 +54,6 @@ TEST_CASE("Testing ReadGraph"){
 
 	}
 
-
 }
 
 /*
@@ -72,26 +61,20 @@ TEST_CASE("Testing ReadGraph"){
         vector<string> vertexLabels, edgeLabels;
         vector<int> 
         string label; 
-
         ifstream file;
-
         file.open("graph.txt", ios_base::in);
-
         if(file.is_open()){
             file >> vertices >> edges;
-
             int i = 0;
             while(file >> label && i < vertices){
                 vertexLabels.push_back(label);
                 i++;
             }
-
             REQUIRE(vertices == 4);
             REQUIRE(edges == 6);
             REQUIRE(vertexLabels[0] == "GingerbreadPlumTrees");
             REQUIRE(vertexLabels[3] == "PeanutBrittleHouse");
             REQUIRE(vertexLabels.size() == 4);
-
             file.close();
         }
         else{

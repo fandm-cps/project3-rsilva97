@@ -26,4 +26,4 @@ matrixDijkstra: matrixDijkstra.cpp shortestPath.o readGraph.o
 	$(CC) -o matrixDijkstra matrixDijkstra.cpp shortestPath.o readGraph.o
 
 clean:
-	rm readGraph shortestPath *.o *.hpp.gch *.gcda *.gcno *~ *.png *.css *.html 7/;
+	rm readGraph shortestPath matrixDijkstra *.o *.hpp.gch *.gcda *.gcno *~ *.png *.css *.html *.gcov a.out;
