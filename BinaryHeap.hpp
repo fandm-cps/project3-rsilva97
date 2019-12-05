@@ -5,6 +5,14 @@
 using namespace std;
 
 class BinaryHeap {
+	protected:
+		double* items;
+		int* indices;
+		bool* removed;
+		double* pCopies;
+		int size;
+		void minHeapify(double* items, int numItems, int index);
+
 	public:
 		BinaryHeap(const double* priorities, int numItems);
 		~BinaryHeap();
