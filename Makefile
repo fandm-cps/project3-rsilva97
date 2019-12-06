@@ -2,7 +2,7 @@ CC = g++ -g
 CFLAGS = -Wall
 COVERAGE = --coverage
 
-all: readGraph_TEST shortestPath_TEST matrixDijkstra BinaryHeap_TEST
+all: readGraph_TEST shortestPath_TEST matrixDijkstra listDijkstra BinaryHeap_TEST
 
 readGraph_TEST: readGraph_TEST.cpp readGraph.hpp
 	$(CC) -o readGraph readGraph_TEST.cpp readGraph.cpp
@@ -10,8 +10,8 @@ readGraph_TEST: readGraph_TEST.cpp readGraph.hpp
 readGraph_cov: readGraph_TEST.cpp readGraph.hpp
 	$(CC) $(CFLAGS) $(COVERAGE) readGraph_TEST.cpp readGraph.hpp readGraph.cpp
 
-shortestPath_TEST: shortestPath_TEST.cpp shortestPath.hpp
-	$(CC) -o shortestPath shortestPath_TEST.cpp shortestPath.cpp readGraph.cpp BinaryHeap.cpp
+shortestPath_TEST: shortestPath_TEST.cpp shortestPath.hpp BinaryHeap.o
+	$(CC) -o shortestPath shortestPath_TEST.cpp shortestPath.cpp readGraph.cpp BinaryHeap.o
 
 shortestPath_cov: shortestPath_TEST.cpp shortestPath.hpp
 	$(CC) $(CFLAGS) $(COVERAGE) shortestPath_TEST.cpp shortestPath.hpp shortestPath.cpp readGraph.cpp BinaryHeap.cpp
@@ -25,8 +25,8 @@ readGraph.o: readGraph.cpp readGraph.hpp
 BinaryHeap.o: BinaryHeap.cpp BinaryHeap.hpp
 	$(CC) -c BinaryHeap.cpp
 
-matrixDijkstra: matrixDijkstra.cpp shortestPath.o readGraph.o
-	$(CC) -o matrixDijkstra matrixDijkstra.cpp shortestPath.o readGraph.o
+matrixDijkstra: matrixDijkstra.cpp shortestPath.o readGraph.o BinaryHeap.o
+	$(CC) -o matrixDijkstra matrixDijkstra.cpp shortestPath.o readGraph.o BinaryHeap.o
 
 listDijkstra: listDijkstra.cpp shortestPath.o readGraph.o BinaryHeap.o
 	$(CC) -o listDijkstra listDijkstra.cpp shortestPath.o readGraph.o BinaryHeap.o
