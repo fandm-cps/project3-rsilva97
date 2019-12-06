@@ -2,6 +2,7 @@
 #include <queue>
 #include <limits>
 #include <vector>
+#include "shortestPath.hpp"
 
 using namespace std;
 
@@ -127,3 +128,45 @@ int getPath(int source, int dest, const int* prev, int*& path){
 
     return size;
 }
+
+void dijkstra(const int* const * adj, const double* const * weights, const int* lengths, int numVertices, int source, double*& dist, int*& prev){
+    bool* foundMin = new bool[numVertices];
+    dist = new double[numVertices];
+    prev = new int[numVertices];
+
+    for(int i = 0; i < numVertices; i++){
+        dist[i] = numeric_limits<double>::infinity();
+        prev[i] = -1;
+        foundMin[i] = false;
+        
+    }
+    dist[source] = 0;
+    prev[source] = source;
+    
+    BinaryHeap minHeap(dist, numVertices);
+    
+    while(minHeap.getSize() != 0){
+        int u = minHeap.getMin();
+        minHeap.popMin();
+        foundMin[u] = true;
+        int v;
+
+        for(int i = 0; i < lengths[u]; i++){
+            v = adj[u][i];
+            if(dist[v] > dist[u] + weights[u][i]){
+                dist[v] = dist[u] + weights[u][i];
+                prev[v] = u; 
+            }
+        }
+    }
+}
+
+
+/*
+Q = vertices
+while q is empty
+    u = extract-min(Q)
+    S = S + {u}
+    for each vertex v in adj[u]
+        RELAX(u, v, w)
+*/
