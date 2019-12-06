@@ -6,10 +6,10 @@ using namespace std;
 
 class BinaryHeap {
 	protected:
-		double* items;
+		double* priorities;
+		double* itemPriorities;
 		int* indices;
-		bool* removed;
-		double* pCopies;
+		bool* isInHeap;
 		int size;
 		void minHeapify(double* items, int numItems, int index);
 

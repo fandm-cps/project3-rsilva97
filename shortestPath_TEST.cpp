@@ -8,7 +8,7 @@ using namespace std;
 
 TEST_CASE("Testing shortestPath"){
 
-    SECTION("functions"){
+    SECTION("dijkstra"){
         
         ifstream file;
         file.open("graph.txt");
@@ -101,6 +101,64 @@ TEST_CASE("Testing shortestPath"){
 		REQUIRE(path[1] == 2);
 		REQUIRE(path[2] == 3);
         */
+    }
+
+    SECTION("Bellman-Ford"){
+        ifstream file;
+        file.open("graph.txt");
+        int** edgeList;
+        double* weights;
+        int numEdges;
+        string* vLabels;
+        string* eLabels;
+        int numVertices = readGraph(file, edgeList, weights, numEdges, vLabels, eLabels);
+       
+        double* dist;
+        int* prev;
+
+        int negCycles = bellmanFord(edgeList, weights, numVertices, numEdges, 0, dist, prev);
+
+        REQUIRE(negCycles == -1);
+        REQUIRE(dist[0] == 0);
+        REQUIRE(dist[1] == 4.5);
+        REQUIRE(dist[2] == 10);
+        REQUIRE(dist[3] == 3.2);
+        REQUIRE(prev[0] == 0);
+        REQUIRE(prev[1] == 3);
+        REQUIRE(prev[2] == 1);
+        REQUIRE(prev[3] == 0);
+
+        negCycles = bellmanFord(edgeList, weights, numVertices, numEdges, 3, dist, prev);
+
+        REQUIRE(negCycles == -1);
+        REQUIRE(dist[0] == 9.5);
+        REQUIRE(dist[1] == 1.3);
+        REQUIRE(dist[2] == 6.8);
+        REQUIRE(dist[3] == 0);
+        REQUIRE(prev[0] == 2);
+        REQUIRE(prev[1] == 3);
+        REQUIRE(prev[2] == 1);
+        REQUIRE(prev[3] == 3);
+
+    }
+
+    SECTION("Bellman-Ford with my graph"){
+        ifstream file;
+        file.open("bgraph.txt");
+        int** edgeList;
+        double* weights;
+        int numEdges;
+        string* vLabels;
+        string* eLabels;
+        int numVertices = readGraph(file, edgeList, weights, numEdges, vLabels, eLabels);
+       
+        double* dist;
+        int* prev;
+
+        int negCycles = bellmanFord(edgeList, weights, numVertices, numEdges, 0, dist, prev);
+
+        REQUIRE_FALSE(negCycles == -1);
+        
     }
 
 }

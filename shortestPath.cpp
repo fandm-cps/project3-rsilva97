@@ -5,6 +5,48 @@
 
 using namespace std;
 
+int bellmanFord(const int* const * edges, const double* weights, int numVertices, int numEdges, int source, double*& dist, int*& prev){
+    dist = new double[numVertices];
+    prev = new int[numVertices];
+
+    for(int i = 0; i < numVertices; i++){
+        dist[i] = numeric_limits<double>::infinity();
+        prev[i] = -1;
+    }
+
+    dist[source] = 0;
+    prev[source] = source;
+
+    int src, dest;
+    double weight;
+    for(int i = 0; i < numVertices; i++){
+        for(int j = 0; j < numEdges; j++){
+            src = edges[j][0];
+            dest = edges[j][1];
+            weight = weights[j];
+            if(dist[src] != numeric_limits<double>::infinity() && dist[dest] > dist[src] + weight){
+                dist[dest] = dist[src] + weight;
+                prev[dest] = src;
+            }
+        }
+    }
+
+    for(int i = 0; i < numEdges; i++){
+        src = edges[i][0];
+        dest = edges[i][1];
+        weight = weights[i];
+        if(dist[dest] > dist[src] + weight){
+            return dest;
+        }
+    }
+
+    return -1;
+}
+
+int getCycle(int vertex, const int* prev, int numVertices, int*& cycle){
+    
+}
+
 void dijkstra(const double* const * matrix, int numVertices, int source, double*& dist, int*& prev){
 
     bool* foundMin = new bool[numVertices];

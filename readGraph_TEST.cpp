@@ -33,15 +33,15 @@ TEST_CASE("Testing ReadGraph"){
     }
     
     SECTION("second function") {
-		ifstream file1;
-		file1.open("graph.txt");
+		ifstream file;
+		file.open("graph.txt");
 		int** adj;
 		double** weights;
 		int* lengths;
 		string* vLabels;
 		string** eLabels;
 
-		int numVertices = readGraph(file1, adj, weights, lengths, vLabels, eLabels);
+		int numVertices = readGraph(file, adj, weights, lengths, vLabels, eLabels);
 
 		REQUIRE(numVertices == 4);
 		REQUIRE(adj[2][1] == 1);
@@ -50,9 +50,30 @@ TEST_CASE("Testing ReadGraph"){
 		REQUIRE(vLabels[3] == "PeanutBrittleHouse");
 		REQUIRE(eLabels[2][1] == "GumdropMountains");
 
-		file1.close();
+		file.close();
 
 	}
+
+    SECTION("third function"){
+        ifstream file;
+        file.open("graph.txt");
+        int** edgeList;
+        double* weights;
+        string* vLabels;
+        string* eLabels;
+        int numEdges;
+
+        int numVertices = readGraph(file, edgeList, weights, numEdges, vLabels, eLabels);
+
+        REQUIRE(edgeList[3][0] == 2);
+        REQUIRE(edgeList[3][1] == 1);
+        REQUIRE(weights[4] == 2.9);
+        REQUIRE(numEdges == 6);
+        REQUIRE(vLabels[1] == "CandyCastle");
+        REQUIRE(eLabels[5] == "PeppermintForest");
+        REQUIRE(numVertices == 4);
+
+    }
 
 }
 
