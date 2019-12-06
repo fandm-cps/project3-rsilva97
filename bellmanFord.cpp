@@ -17,16 +17,16 @@ int main(int argc, char* argv[]) {
 	string srcVertex = argv[3];
 	string destVertex = argv[4];
 
-    double** matrix;
+    int** edgeList;
+    double* weights;
+    int numEdges;
     string* vLabels;
-    string** eLabels;
+    string* eLabels;
     double* dist;
     int* prev;
-    int* path;
+    int* cycle;
 
-    auto startTime = std::chrono::system_clock::now();
-
-    int numVertices = readGraph(file, matrix, vLabels, eLabels);
+    int numVertices = readGraph(file, edgeList, weights, numEdges, vLabels, eLabels);
 
     int srcVertexIdx = -1, destVertexIdx = -1;
     for(int i = 0; i < numVertices; i++){
@@ -39,12 +39,15 @@ int main(int argc, char* argv[]) {
     }
 
     auto startTime = std::chrono::system_clock::now();
+    int negCycle = bellmanFord(edgeList, weights, numVertices, numEdges, srcVertexIdx, dist, prev);
 
-    dijkstra(matrix, numVertices, srcVertexIdx, dist, prev);
+    if(negCycle != -1){
+        //int cycleSize = getCycle(negCycle, prev, cycle);
+        cout << "Negative cycle detected!" << endl;
+        exit(1);
+    }
 
-    int pathLength = getPath(srcVertexIdx, destVertexIdx, prev, path);
-
-    outFile << numVertices << " " << pathLength-1 << endl;
+    outFile << numVertices << " " << negCycle-1 << endl;
     for(int i = 0; i < numVertices; i++){
         outFile << vLabels[i] << endl;
     }
@@ -60,6 +63,6 @@ int main(int argc, char* argv[]) {
     double elapsedTime = durMicrosecs.count();
 
     cout << "Weight of shortest path: " << dist[destVertexIdx] << endl;
-    cout << "Duration of Dijkstra's algorithm: " << elapsedTime << " microseconds." << endl;
+    cout << "Duration of Bellman-Ford's algorithm: " << elapsedTime << " microseconds." << endl;
 
 }
