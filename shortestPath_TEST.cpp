@@ -202,7 +202,6 @@ TEST_CASE("Testing shortestPath"){
         int cycleSize = getCycle(negCycles, prev, numVertices, cycle);
 
         REQUIRE(cycleSize == 5);
-
         
     }
 
