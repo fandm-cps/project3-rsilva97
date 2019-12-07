@@ -45,7 +45,40 @@ int bellmanFord(const int* const * edges, const double* weights, int numVertices
 }
 
 int getCycle(int vertex, const int* prev, int numVertices, int*& cycle){
-    
+
+    bool finished = false;
+    bool* visited = new bool[numVertices];
+    for(int i = 0; i < numVertices; i++){
+        visited[i] = false;
+    }
+    visited[vertex] = true;
+    int size = 1, nextVertex = prev[vertex];
+
+    while(!finished){
+        
+        if(visited[nextVertex]){
+            finished = true;
+        }
+        else{
+            size++;
+            visited[nextVertex] = true;
+            nextVertex = prev[nextVertex];
+        }
+        
+    }
+    size++;
+    cycle = new int[size];
+    cycle[0] = vertex;
+
+    nextVertex = prev[vertex];
+    for(int i = 1; i < size ; i++){
+        cycle[i] = nextVertex;
+        nextVertex = prev[nextVertex];
+    }
+
+    delete[] visited;
+
+    return size;
 }
 
 void dijkstra(const double* const * matrix, int numVertices, int source, double*& dist, int*& prev){

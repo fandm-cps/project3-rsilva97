@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-	ifstream file;
+    ifstream file;
 	ofstream outFile;
 
 	file.open(argv[1], ios_base::in);
@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
     string* eLabels;
     double* dist;
     int* prev;
+    int* path;
     int* cycle;
 
     int numVertices = readGraph(file, edgeList, weights, numEdges, vLabels, eLabels);
@@ -39,20 +40,56 @@ int main(int argc, char* argv[]) {
     }
 
     auto startTime = std::chrono::system_clock::now();
+
     int negCycle = bellmanFord(edgeList, weights, numVertices, numEdges, srcVertexIdx, dist, prev);
-
+    
     if(negCycle != -1){
-        //int cycleSize = getCycle(negCycle, prev, cycle);
         cout << "Negative cycle detected!" << endl;
-        exit(1);
-    }
+        int cycleSize = getCycle(negCycle, prev, numVertices, cycle);
 
-    outFile << numVertices << " " << negCycle-1 << endl;
-    for(int i = 0; i < numVertices; i++){
-        outFile << vLabels[i] << endl;
+        outFile << numVertices << " " << cycleSize-1 << endl;
+        for(int i = 0; i < numVertices; i++){
+            outFile << vLabels[i] << endl;
+        }
+
+        int totalWeight = 0;
+        for(int i = cycleSize-1; i > 0; i--){
+            int from = cycle[i], to = cycle[i-1], idx;
+            
+            for(int j = 0; j < numEdges; j++){
+                if(edgeList[j][0] == from && edgeList[j][1] == to){
+                    idx = j;
+                    totalWeight += weights[idx];
+                }
+            }
+            
+            outFile << from << " " << to << " " << weights[idx] << " " << eLabels[idx] << endl;
+        }
+    
+        cout << "Total Weight: " << totalWeight << endl;
+        
     }
-    for(int i = 0; i < pathLength-1; i++){
-        outFile << path[i] << " " << path[i+1] << " " << matrix[path[i]][path[i+1]] << " " << eLabels[path[i]][path[i+1]] << endl;
+    else{
+        int pathLength = getPath(srcVertexIdx, destVertexIdx, prev, path);
+
+        outFile << numVertices << " " << pathLength-1 << endl;
+        for(int i = 0; i < numVertices; i++){
+            outFile << vLabels[i] << endl;
+        }
+        
+        for(int i = 0; i < pathLength-1; i++){
+            int from = path[i], to = path[i+1], idx;
+
+            for(int j = 0; j < numEdges; j++){
+                if(edgeList[j][0] == from && edgeList[j][1] == to){
+                    idx = j;
+                }
+            }
+
+            outFile << from << " " << to << " " << weights[idx] << " " << eLabels[idx] << endl;
+        }
+
+        cout << "Weight of shortest path: " << dist[destVertexIdx] << endl;
     }
 	
     file.close();
@@ -61,8 +98,6 @@ int main(int argc, char* argv[]) {
     auto endTime = std::chrono::system_clock::now();
     auto durMicrosecs = chrono::duration_cast<chrono::microseconds>(endTime-startTime);
     double elapsedTime = durMicrosecs.count();
-
-    cout << "Weight of shortest path: " << dist[destVertexIdx] << endl;
     cout << "Duration of Bellman-Ford's algorithm: " << elapsedTime << " microseconds." << endl;
 
 }
