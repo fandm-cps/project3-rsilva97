@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 #include <chrono>
 #include "readGraph.hpp"
 #include "shortestPath.hpp"
@@ -16,6 +17,7 @@ int main(int argc, char* argv[]) {
 	outFile.open(argv[2], ios_base::out);
 	string srcVertex = argv[3];
 	string destVertex = argv[4];
+    double transactionCost = atof(argv[5]);
 
     int** edgeList;
     double* weights;
@@ -39,12 +41,20 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    for(int i = 0; i < numEdges; i++){
+        weights[i] = (-1)*log(weights[i] * (1 - transactionCost));
+    }
+
     auto startTime = std::chrono::system_clock::now();
 
     int negCycle = bellmanFord(edgeList, weights, numVertices, numEdges, srcVertexIdx, dist, prev);
     
+    for(int i = 0; i < numEdges; i++){
+        weights[i] = exp(weights[i]);
+    }
+
     if(negCycle != -1){
-        cout << "Negative cycle detected!" << endl;
+        cout << "Arbitrage opportunity detected!" << endl;
         int cycleSize = getCycle(negCycle, prev, numVertices, cycle);
 
         outFile << numVertices << " " << cycleSize-1 << endl;
@@ -66,10 +76,11 @@ int main(int argc, char* argv[]) {
             outFile << from << " " << to << " " << weights[idx] << " " << eLabels[idx] << endl;
         }
     
-        cout << "Total Weight: " << totalWeight << endl;
+        cout << "Effective Exchange Rate: " << totalWeight << endl;
         
     }
     else{
+        
         int pathLength = getPath(srcVertexIdx, destVertexIdx, prev, path);
 
         outFile << numVertices << " " << pathLength-1 << endl;
@@ -78,18 +89,18 @@ int main(int argc, char* argv[]) {
         }
         
         for(int i = 0; i < pathLength-1; i++){
-            int from = path[i], to = path[i+1], idx;
+            int from = path[i], to = path[i+1], idx = 0;
 
             for(int j = 0; j < numEdges; j++){
                 if(edgeList[j][0] == from && edgeList[j][1] == to){
                     idx = j;
                 }
             }
-
+            
             outFile << from << " " << to << " " << weights[idx] << " " << eLabels[idx] << endl;
         }
 
-        cout << "Weight of shortest path: " << dist[destVertexIdx] << endl;
+        cout << "Effective Exchange Rate: " << dist[destVertexIdx] << endl;
     }
 	
     file.close();

@@ -183,7 +183,7 @@ TEST_CASE("Testing shortestPath"){
 
     SECTION("Bellman-Ford with my graph"){
         ifstream file;
-        file.open("bgraph.txt");
+        file.open("graph2.txt");
         int** edgeList;
         double* weights;
         int numEdges;
@@ -193,10 +193,15 @@ TEST_CASE("Testing shortestPath"){
        
         double* dist;
         int* prev;
+        int* cycle;
 
         int negCycles = bellmanFord(edgeList, weights, numVertices, numEdges, 0, dist, prev);
 
-        REQUIRE_FALSE(negCycles == -1);
+        REQUIRE(negCycles == 3);
+
+        int cycleSize = getCycle(negCycles, prev, numVertices, cycle);
+
+        REQUIRE(cycleSize == 5);
         
     }
 
